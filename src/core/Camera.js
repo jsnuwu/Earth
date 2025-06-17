@@ -8,7 +8,7 @@ export class Camera {
       0.1,
       1000
     );
-    this.camera.position.z = 40;
+    this.camera.position.z = 45;
   }
 
   getCamera() {

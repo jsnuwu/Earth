@@ -34,25 +34,10 @@ window.addEventListener('resize', () => {
 function animate() {
   requestAnimationFrame(animate);
   planet.rotate();
-    atmosphere.rotate();
+  atmosphere.rotate();
   controls.update();
   renderer.getRenderer().render(sceneManager.getScene(), camera.getCamera());
 }
 animate();
 
 
-/*
-Farbe	Hex-Code	Beschreibung
-Rot	0xff0000	Reines Rot
-Grün	0x00ff00	Reines Grün
-Blau	0x0000ff	Reines Blau
-Gelb	0xffff00	Rot + Grün = Gelb
-Cyan	0x00ffff	Grün + Blau = Cyan
-Magenta	0xff00ff	Rot + Blau = Magenta
-Weiß	0xffffff	Alle Farben kombiniert
-Schwarz	0x000000	Keine Farbe (dunkel)
-Grau	0x808080	Mittelgrau
-Orange	0xffa500	Warmes Orange
-Rosa	0xff69b4	Hotpink/Rosa
-Violett	0x800080	Dunkles Lila
-*/
