@@ -7,12 +7,13 @@ export class Planet {
     this.mesh = new THREE.Mesh(geometry, material);
   }
 
-  rotate(speed = 0.002) {
+  rotate(speed = 0.005) {
     this.mesh.rotation.y += speed;
-    this.mesh.rotation.x += 0.001;
+    this.mesh.rotation.x += 0.005;
   }
 
   getMesh() {
     return this.mesh;
   }
+  
 }
