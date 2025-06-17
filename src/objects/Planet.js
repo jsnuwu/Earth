@@ -9,6 +9,7 @@ export class Planet {
 
   rotate(speed = 0.002) {
     this.mesh.rotation.y += speed;
+    this.mesh.rotation.x += 0.001;
   }
 
   getMesh() {
