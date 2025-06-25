@@ -5,19 +5,19 @@ import { Renderer } from './core/Renderer.js';
 import { Controls } from './core/Controls.js';
 import { Planet } from './objects/Planet.js';
 import { Stars } from './objects/Stars.js';
-
+import './nav/navigation.css';
 import navigation from './nav/navigation.html?raw';
 
+// 1. Navigation einfügen, damit die Buttons im DOM sind
 document.body.insertAdjacentHTML('afterbegin', navigation);
 
+// 2. Jetzt kann man die Buttons referenzieren
 const btnRotate = document.getElementById('btnRotation');
+const btnToggleTexture = document.getElementById('btnToggleTexture');
 
 let rotateEnabled = true;
-btnRotate.addEventListener('click', () => {
-  rotateEnabled = !rotateEnabled;
-  btnRotate.textContent = rotateEnabled ? 'Rotation Off' : 'Rotation On';
-});
 
+// 3. Szene aufbauen
 const sceneManager = new SceneManager();
 const camera = new Camera();
 const renderer = new Renderer();
@@ -35,6 +35,17 @@ directionalLight.position.set(30, 10, 50);
 sceneManager.add(ambientLight);
 sceneManager.add(directionalLight);
 
+// 4. EventListener hinzufügen (nachdem Planet erstellt wurde!)
+btnRotate.addEventListener('click', () => {
+  rotateEnabled = !rotateEnabled;
+  btnRotate.textContent = rotateEnabled ? 'Rotation Off' : 'Rotation On';
+});
+
+btnToggleTexture.addEventListener('click', () => {
+  planet.toggleTexture();
+  btnToggleTexture.textContent = planet.isNight ? 'Switch to Day' : 'Switch to Night';
+});
+
 window.addEventListener('resize', () => {
   camera.resize();
   renderer.resize();
@@ -45,7 +56,6 @@ function animate() {
 
   if (rotateEnabled) {
     planet.rotate(0.0003);
-    planet.cloudsMesh.rotation.y += 0.00035;
   }
 
   controls.update();
