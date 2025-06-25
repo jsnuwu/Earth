@@ -8,16 +8,13 @@ import { Stars } from './objects/Stars.js';
 import './nav/navigation.css';
 import navigation from './nav/navigation.html?raw';
 
-// 1. Navigation einfügen, damit die Buttons im DOM sind
 document.body.insertAdjacentHTML('afterbegin', navigation);
 
-// 2. Jetzt kann man die Buttons referenzieren
 const btnRotate = document.getElementById('btnRotation');
 const btnToggleTexture = document.getElementById('btnToggleTexture');
 
 let rotateEnabled = true;
 
-// 3. Szene aufbauen
 const sceneManager = new SceneManager();
 const camera = new Camera();
 const renderer = new Renderer();
@@ -35,7 +32,6 @@ directionalLight.position.set(30, 10, 50);
 sceneManager.add(ambientLight);
 sceneManager.add(directionalLight);
 
-// 4. EventListener hinzufügen (nachdem Planet erstellt wurde!)
 btnRotate.addEventListener('click', () => {
   rotateEnabled = !rotateEnabled;
   btnRotate.textContent = rotateEnabled ? 'Rotation Off' : 'Rotation On';
