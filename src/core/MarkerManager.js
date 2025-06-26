@@ -19,9 +19,9 @@ export class MarkerManager {
     return marker;
   }
 
-  update() {
-    this.markers.forEach(marker => marker.update());
-  }
+update(planetMesh) {
+  this.markers.forEach(marker => marker.update(planetMesh));
+}
 
   clear() {
     this.markers.forEach(marker => marker.dispose());

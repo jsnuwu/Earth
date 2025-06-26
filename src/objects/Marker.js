@@ -9,10 +9,12 @@ export class Marker {
     this.camera = camera;
     this.renderer = renderer;
 
-    this.position = this.convertLatLonToVec3(lat, lon, radius + 0.2);
+    // Lokale Position auf Kugeloberfläche (fix, ohne Rotation)
+    this.localPosition = this.convertLatLonToVec3(lat, lon, radius + 0.2);
 
+    // DOM-Elemente
     this.container = document.createElement('div');
-    this.container.className = 'marker-container';  
+    this.container.className = 'marker-container';
 
     this.el = document.createElement('div');
     this.el.className = 'marker';
@@ -20,12 +22,11 @@ export class Marker {
 
     this.tooltip = document.createElement('div');
     this.tooltip.className = 'tooltip';
-    this.tooltip.textContent = `ewdydsdad`;
+    this.tooltip.textContent = `wwwww`;
 
     this.container.appendChild(this.el);
     this.container.appendChild(this.tooltip);
     document.body.appendChild(this.container);
-
   }
 
   convertLatLonToVec3(lat, lon, radius) {
@@ -39,25 +40,43 @@ export class Marker {
     return new THREE.Vector3(x, y, z);
   }
 
-  update() {
-    const vector = this.position.clone().project(this.camera);
-    const widthHalf = 0.5 * this.renderer.domElement.clientWidth;
-    const heightHalf = 0.5 * this.renderer.domElement.clientHeight;
+update(planetMesh) {
+  const pos = this.localPosition.clone();
+  pos.applyQuaternion(planetMesh.quaternion);
 
-    const x = vector.x * widthHalf + widthHalf;
-    const y = -vector.y * heightHalf + heightHalf;
+  const cameraPos = this.camera.position.clone();
 
-    const isVisible = vector.z < 1;
+  const direction = pos.clone().sub(cameraPos).normalize();
+  const raycaster = new THREE.Raycaster(cameraPos, direction);
 
-this.container.style.left = `${x}px`;
-this.container.style.top = `${y}px`;
-this.container.style.display = isVisible ? 'block' : 'none';
+  const intersects = raycaster.intersectObject(planetMesh);
 
+  const distanceToMarker = cameraPos.distanceTo(pos);
+
+  const isOccluded = intersects.some(intersect => intersect.distance < distanceToMarker);
+
+  if (isOccluded) {
+    this.container.style.display = 'none'; 
+    return;
   }
+
+  const vector = pos.project(this.camera);
+  const widthHalf = 0.5 * this.renderer.domElement.clientWidth;
+  const heightHalf = 0.5 * this.renderer.domElement.clientHeight;
+
+  const x = vector.x * widthHalf + widthHalf;
+  const y = -vector.y * heightHalf + heightHalf;
+
+  const isVisible = vector.z < 1;
+
+  this.container.style.left = `${x}px`;
+  this.container.style.top = `${y}px`;
+  this.container.style.display = isVisible ? 'block' : 'none';
+}
+
 
   dispose() {
     this.el.remove();
     this.container.remove();
-
   }
 }

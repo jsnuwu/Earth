@@ -46,7 +46,23 @@ sceneManager.add(moonLight);
 
 const markerManager = new MarkerManager(camera.getCamera(), renderer.getRenderer());
 
-markerManager.addMarker({ lat: 48.8566, lon: 2.3522, label: 'test' });
+markerManager.addMarker({ lat: 53.5511, lon: 9.9937, label: 'Hamburg' });
+markerManager.addMarker({ lat: 49.4521, lon: 11.0767, label: 'Nürnberg' });        
+markerManager.addMarker({ lat: 51.7191, lon: 8.7540, label: 'Paderborn' });      
+markerManager.addMarker({ lat: 49.2330, lon: 6.9950, label: 'Saarbrücken' });    
+markerManager.addMarker({ lat: 50.9271, lon: 6.9603, label: 'Köln' });             
+markerManager.addMarker({ lat: 48.7758, lon: 9.1829, label: 'Stuttgart' });
+markerManager.addMarker({ lat: 48.1250, lon: 11.5750, label: 'München' });
+markerManager.addMarker({ lat: 52.5200, lon: 13.4050, label: 'Berlin' });
+markerManager.addMarker({ lat: 52.3759, lon: 9.7320, label: 'Hannover' });        
+markerManager.addMarker({ lat: 49.0069, lon: 8.4037, label: 'Karlsruhe' });
+markerManager.addMarker({ lat: 54.3233, lon: 10.1228, label: 'Kiel' });
+markerManager.addMarker({ lat: 49.2747, lon: 8.6457, label: 'Walldorf' });
+
+
+
+
+
 
 btnRotate.addEventListener('click', () => {
   rotateEnabled = !rotateEnabled;
@@ -63,14 +79,13 @@ window.addEventListener('resize', () => {
   renderer.resize();
 });
 
-
 function animate() {
   requestAnimationFrame(animate);
 
   if (rotateEnabled) {
     planet.rotate(0.0003);
   }
-  markerManager.update();
+  markerManager.update(planet.getMesh());
   controls.update();
   renderer.getRenderer().render(sceneManager.getScene(), camera.getCamera());
 }
