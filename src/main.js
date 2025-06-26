@@ -7,6 +7,7 @@ import { Planet } from './objects/Planet.js';
 import { Stars } from './objects/Stars.js';
 import './nav/navigation.css';
 import navigation from './nav/navigation.html?raw';
+import { MarkerManager } from './core/MarkerManager.js';
 
 document.body.insertAdjacentHTML('afterbegin', navigation);
 
@@ -43,6 +44,9 @@ moonLight.castShadow = true;
 sceneManager.add(sunLight);
 sceneManager.add(moonLight);
 
+const markerManager = new MarkerManager(camera.getCamera(), renderer.getRenderer());
+
+markerManager.addMarker({ lat: 48.8566, lon: 2.3522, label: 'test' });
 
 btnRotate.addEventListener('click', () => {
   rotateEnabled = !rotateEnabled;
@@ -66,7 +70,7 @@ function animate() {
   if (rotateEnabled) {
     planet.rotate(0.0003);
   }
-
+  markerManager.update();
   controls.update();
   renderer.getRenderer().render(sceneManager.getScene(), camera.getCamera());
 }

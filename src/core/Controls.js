@@ -5,6 +5,9 @@ export class Controls {
     this.controls = new OrbitControls(camera, rendererDomElement);
     this.controls.enableDamping = true;
     this.controls.enableZoom = true;
+
+    this.controls.minDistance = 16;
+    this.controls.maxDistance= 1000;
   }
 
   update() {
