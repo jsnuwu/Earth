@@ -32,6 +32,18 @@ directionalLight.position.set(30, 10, 50);
 sceneManager.add(ambientLight);
 sceneManager.add(directionalLight);
 
+const sunLight = new THREE.DirectionalLight(0xffffff, 3.5);
+sunLight.position.set(10, 20, 10);
+sunLight.castShadow = true;
+
+const moonLight = new THREE.DirectionalLight(0x77ccff, 0); 
+moonLight.position.set(-10, 20, 10);
+moonLight.castShadow = true;
+
+sceneManager.add(sunLight);
+sceneManager.add(moonLight);
+
+
 btnRotate.addEventListener('click', () => {
   rotateEnabled = !rotateEnabled;
   btnRotate.textContent = rotateEnabled ? 'Rotation Off' : 'Rotation On';
@@ -46,6 +58,7 @@ window.addEventListener('resize', () => {
   camera.resize();
   renderer.resize();
 });
+
 
 function animate() {
   requestAnimationFrame(animate);
