@@ -1,13 +1,13 @@
 import * as THREE from 'three';
-import { SceneManager } from './core/SceneManager.js';
-import { Camera } from './core/Camera.js';
-import { Renderer } from './core/Renderer.js';
-import { Controls } from './core/Controls.js';
-import { Planet } from './objects/Planet.js';
-import { Stars } from './objects/Stars.js';
-import './nav/navigation.css';
-import navigation from './nav/navigation.html?raw';
-import { MarkerManager } from './core/MarkerManager.js';
+import { SceneManager } from './src/core/SceneManager.js';
+import { Camera } from './src/core/Camera.js';
+import { Renderer } from './src/core/Renderer.js';
+import { Controls } from './src/core/Controls.js';
+import { Planet } from './src/objects/Planet.js';
+import { Stars } from './src/objects/Stars.js';
+import './src/nav/navigation.css';
+import navigation from './src/nav/navigation.html?raw';
+import { MarkerManager } from './src/core/MarkerManager.js';
 
 document.body.insertAdjacentHTML('afterbegin', navigation);
 
