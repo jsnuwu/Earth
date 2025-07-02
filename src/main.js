@@ -45,7 +45,7 @@ sceneManager.add(sunLight);
 sceneManager.add(moonLight);
 
 const markerManager = new MarkerManager(camera.getCamera(), renderer.getRenderer());
-
+/*
 markerManager.addMarker({ lat: 53.5511, lon: 9.9937, label: 'Hamburg' });
 markerManager.addMarker({ lat: 49.4521, lon: 11.0767, label: 'Nürnberg' });        
 markerManager.addMarker({ lat: 51.7191, lon: 8.7540, label: 'Paderborn' });      
@@ -58,12 +58,7 @@ markerManager.addMarker({ lat: 52.3759, lon: 9.7320, label: 'Hannover' });
 markerManager.addMarker({ lat: 49.0069, lon: 8.4037, label: 'Karlsruhe' });
 markerManager.addMarker({ lat: 54.3233, lon: 10.1228, label: 'Kiel' });
 markerManager.addMarker({ lat: 49.2747, lon: 8.6457, label: 'Walldorf' });
-
-
-
-
-
-
+*/
 btnRotate.addEventListener('click', () => {
   rotateEnabled = !rotateEnabled;
   btnRotate.textContent = rotateEnabled ? 'Rotation Off' : 'Rotation On';

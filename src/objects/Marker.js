@@ -9,10 +9,8 @@ export class Marker {
     this.camera = camera;
     this.renderer = renderer;
 
-    // Lokale Position auf Kugeloberfläche (fix, ohne Rotation)
     this.localPosition = this.convertLatLonToVec3(lat, lon, radius + 0.2);
 
-    // DOM-Elemente
     this.container = document.createElement('div');
     this.container.className = 'marker-container';
 
