@@ -1,25 +1,28 @@
-import * as THREE from 'three';
-import { SceneManager } from './src/core/SceneManager.js';
-import { Camera } from './src/core/Camera.js';
-import { Renderer } from './src/core/Renderer.js';
-import { Controls } from './src/core/Controls.js';
-import { Planet } from './src/objects/Planet.js';
-import { Stars } from './src/objects/Stars.js';
-import './src/nav/navigation.css';
-import navigation from './src/nav/navigation.html?raw';
-import { MarkerManager } from './src/core/MarkerManager.js';
+import * as THREE from "three";
+import { SceneManager } from "./src/core/SceneManager.js";
+import { Camera } from "./src/core/Camera.js";
+import { Renderer } from "./src/core/Renderer.js";
+import { Controls } from "./src/core/Controls.js";
+import { Planet } from "./src/objects/Planet.js";
+import { Stars } from "./src/objects/Stars.js";
+import "./src/nav/navigation.css";
+import navigation from "./src/nav/navigation.html?raw";
+import { MarkerManager } from "./src/core/MarkerManager.js";
 
-document.body.insertAdjacentHTML('afterbegin', navigation);
+document.body.insertAdjacentHTML("afterbegin", navigation);
 
-const btnRotate = document.getElementById('btnRotation');
-const btnToggleTexture = document.getElementById('btnToggleTexture');
+const btnRotate = document.getElementById("btnRotation");
+const btnToggleTexture = document.getElementById("btnToggleTexture");
 
 let rotateEnabled = true;
 
 const sceneManager = new SceneManager();
 const camera = new Camera();
 const renderer = new Renderer();
-const controls = new Controls(camera.getCamera(), renderer.getRenderer().domElement);
+const controls = new Controls(
+  camera.getCamera(),
+  renderer.getRenderer().domElement
+);
 
 const planet = new Planet(sceneManager.getScene());
 const stars = new Stars(2000);
@@ -44,32 +47,37 @@ moonLight.castShadow = true;
 sceneManager.add(sunLight);
 sceneManager.add(moonLight);
 
-const markerManager = new MarkerManager(camera.getCamera(), renderer.getRenderer());
+const markerManager = new MarkerManager(
+  camera.getCamera(),
+  renderer.getRenderer()
+);
 
-markerManager.addMarker({ lat: 53.5511, lon: 9.9937, label: 'Hamburg' });
-markerManager.addMarker({ lat: 49.4521, lon: 11.0767, label: 'Nürnberg' });        
-markerManager.addMarker({ lat: 51.7191, lon: 8.7540, label: 'Paderborn' });      
-markerManager.addMarker({ lat: 49.2330, lon: 6.9950, label: 'Saarbrücken' });    
-markerManager.addMarker({ lat: 50.9271, lon: 6.9603, label: 'Köln' });             
-markerManager.addMarker({ lat: 48.7758, lon: 9.1829, label: 'Stuttgart' });
-markerManager.addMarker({ lat: 48.1250, lon: 11.5750, label: 'München' });
-markerManager.addMarker({ lat: 52.5200, lon: 13.4050, label: 'Berlin' });
-markerManager.addMarker({ lat: 52.3759, lon: 9.7320, label: 'Hannover' });        
-markerManager.addMarker({ lat: 49.0069, lon: 8.4037, label: 'Karlsruhe' });
-markerManager.addMarker({ lat: 54.3233, lon: 10.1228, label: 'Kiel' });
-markerManager.addMarker({ lat: 49.2747, lon: 8.6457, label: 'Walldorf' });
+markerManager.addMarker({ lat: 53.5511, lon: 9.9937, label: "Hamburg" });
+markerManager.addMarker({ lat: 49.4521, lon: 11.0767, label: "Nürnberg" });
+markerManager.addMarker({ lat: 51.7191, lon: 8.754, label: "Paderborn" });
+markerManager.addMarker({ lat: 49.233, lon: 6.995, label: "Saarbrücken" });
+markerManager.addMarker({ lat: 50.9271, lon: 6.9603, label: "Köln" });
+markerManager.addMarker({ lat: 48.7758, lon: 9.1829, label: "Stuttgart" });
+markerManager.addMarker({ lat: 48.125, lon: 11.575, label: "München" });
+markerManager.addMarker({ lat: 52.52, lon: 13.405, label: "Berlin" });
+markerManager.addMarker({ lat: 52.3759, lon: 9.732, label: "Hannover" });
+markerManager.addMarker({ lat: 49.0069, lon: 8.4037, label: "Karlsruhe" });
+markerManager.addMarker({ lat: 54.3233, lon: 10.1228, label: "Kiel" });
+markerManager.addMarker({ lat: 49.2747, lon: 8.6457, label: "Walldorf" });
 
-btnRotate.addEventListener('click', () => {
+btnRotate.addEventListener("click", () => {
   rotateEnabled = !rotateEnabled;
-  btnRotate.textContent = rotateEnabled ? 'Rotation Off' : 'Rotation On';
+  btnRotate.textContent = rotateEnabled ? "Rotation Off" : "Rotation On";
 });
 
-btnToggleTexture.addEventListener('click', () => {
+btnToggleTexture.addEventListener("click", () => {
   planet.toggleTexture();
-  btnToggleTexture.textContent = planet.isNight ? 'Switch to Day' : 'Switch to Night';
+  btnToggleTexture.textContent = planet.isNight
+    ? "Switch to Day"
+    : "Switch to Night";
 });
 
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
   camera.resize();
   renderer.resize();
 });
@@ -79,45 +87,46 @@ const mouse = new THREE.Vector2();
 
 let isDragging = false;
 let prevMouse = { x: 0, y: 0 };
-let activeControl = null; 
+let activeControl = null;
 
 const domElement = renderer.getRenderer().domElement;
 
-domElement.addEventListener('mousedown', (event) => {
+domElement.addEventListener("mousedown", (event) => {
   isDragging = true;
   prevMouse.x = event.clientX;
   prevMouse.y = event.clientY;
 
   mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = - (event.clientY / window.innerHeight) * 2 + 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
   raycaster.setFromCamera(mouse, camera.getCamera());
   const intersects = raycaster.intersectObject(planet.getMesh(), true);
 
   if (intersects.length > 0) {
-    activeControl = 'earth';
+    activeControl = "earth";
     controls.disable();
   } else {
-    activeControl = 'orbit';
+    activeControl = "orbit";
     controls.enable();
   }
 });
 
-domElement.addEventListener('mousemove', (event) => {
+domElement.addEventListener("mousemove", (event) => {
   if (!isDragging) return;
 
   const deltaX = event.clientX - prevMouse.x;
   const deltaY = event.clientY - prevMouse.y;
 
-  if (activeControl === 'earth') {
-
+  if (activeControl === "earth") {
     planet.getMesh().rotation.y += deltaX * 0.005;
     planet.getMesh().rotation.x += deltaY * 0.005;
 
     const limit = Math.PI / 2;
-    planet.getMesh().rotation.x = Math.max(-limit, Math.min(limit, planet.getMesh().rotation.x));
-  } else if (activeControl === 'orbit') {
-
+    planet.getMesh().rotation.x = Math.max(
+      -limit,
+      Math.min(limit, planet.getMesh().rotation.x)
+    );
+  } else if (activeControl === "orbit") {
     controls.controls.rotateLeft(deltaX * 0.005);
     controls.controls.rotateUp(deltaY * 0.005);
     controls.update();
@@ -127,10 +136,10 @@ domElement.addEventListener('mousemove', (event) => {
   prevMouse.y = event.clientY;
 });
 
-domElement.addEventListener('mouseup', () => {
+domElement.addEventListener("mouseup", () => {
   isDragging = false;
   activeControl = null;
-  controls.enable(); 
+  controls.enable();
 });
 
 function animate() {
@@ -146,7 +155,7 @@ function animate() {
 
   markerManager.update(planet.getMesh());
 
-  if (activeControl !== 'earth') {
+  if (activeControl !== "earth") {
     controls.update();
   }
 

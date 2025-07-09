@@ -1,4 +1,4 @@
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export class Controls {
   constructor(camera, rendererDomElement) {
@@ -7,7 +7,7 @@ export class Controls {
     this.controls.enableZoom = true;
 
     this.controls.minDistance = 16;
-    this.controls.maxDistance= 1000;
+    this.controls.maxDistance = 1000;
     this.controls.enabled = true;
   }
 

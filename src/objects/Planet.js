@@ -1,14 +1,18 @@
-import * as THREE from 'three';
+import * as THREE from "three";
 
 export class Planet {
   constructor(scene) {
     this.radius = 15;
     this.scene = scene;
 
-    this.dayTexture = new THREE.TextureLoader().load('textures/earthmap.jpeg');
-    this.nightTexture = new THREE.TextureLoader().load('textures/earthmap_night.jpeg');
-    const bumpMap = new THREE.TextureLoader().load('textures/earthbump.jpeg');
-    const cloudsTexture = new THREE.TextureLoader().load('textures/earthCloud.png');
+    this.dayTexture = new THREE.TextureLoader().load("textures/earthmap.jpeg");
+    this.nightTexture = new THREE.TextureLoader().load(
+      "textures/earthmap_night.jpeg"
+    );
+    const bumpMap = new THREE.TextureLoader().load("textures/earthbump.jpeg");
+    const cloudsTexture = new THREE.TextureLoader().load(
+      "textures/earthCloud.png"
+    );
 
     this.material = new THREE.MeshStandardMaterial({
       map: this.dayTexture,
