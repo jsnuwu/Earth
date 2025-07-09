@@ -8,6 +8,7 @@ import { Stars } from "./src/objects/Stars.js";
 import "./src/nav/navigation.css";
 import navigation from "./src/nav/navigation.html?raw";
 import { MarkerManager } from "./src/core/MarkerManager.js";
+import { EarthControls } from "./src/core/EarthControls.js";
 
 document.body.insertAdjacentHTML("afterbegin", navigation);
 
@@ -19,13 +20,13 @@ let rotateEnabled = true;
 const sceneManager = new SceneManager();
 const camera = new Camera();
 const renderer = new Renderer();
+const planet = new Planet(sceneManager.getScene());
+const stars = new Stars(2000);
+const earthControls = new EarthControls(planet.getMesh(), renderer.getRenderer().domElement);
 const controls = new Controls(
   camera.getCamera(),
   renderer.getRenderer().domElement
 );
-
-const planet = new Planet(sceneManager.getScene());
-const stars = new Stars(2000);
 
 sceneManager.add(planet.getMesh());
 sceneManager.add(stars.getMesh());
@@ -46,6 +47,7 @@ moonLight.castShadow = true;
 
 sceneManager.add(sunLight);
 sceneManager.add(moonLight);
+
 
 const markerManager = new MarkerManager(
   camera.getCamera(),
@@ -87,17 +89,16 @@ const mouse = new THREE.Vector2();
 
 let isDragging = false;
 let prevMouse = { x: 0, y: 0 };
-let activeControl = null;
 
 const domElement = renderer.getRenderer().domElement;
 
-domElement.addEventListener("mousedown", (event) => {
-  isDragging = true;
-  prevMouse.x = event.clientX;
-  prevMouse.y = event.clientY;
+let activeControl = null;
 
-  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
-  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+domElement.addEventListener("mousedown", (event) => {
+  const mouse = new THREE.Vector2(
+    (event.clientX / window.innerWidth) * 2 - 1,
+    -(event.clientY / window.innerHeight) * 2 + 1
+  );
 
   raycaster.setFromCamera(mouse, camera.getCamera());
   const intersects = raycaster.intersectObject(planet.getMesh(), true);
@@ -105,10 +106,16 @@ domElement.addEventListener("mousedown", (event) => {
   if (intersects.length > 0) {
     activeControl = "earth";
     controls.disable();
+    earthControls.enable();
   } else {
     activeControl = "orbit";
+    earthControls.disable();
     controls.enable();
   }
+});
+
+domElement.addEventListener("mouseup", () => {
+  activeControl = null;
 });
 
 domElement.addEventListener("mousemove", (event) => {
@@ -149,9 +156,11 @@ function animate() {
   const earthPos = planet.getMesh().position;
   const camDistance = camPos.distanceTo(earthPos);
 
-  if (rotateEnabled && !isDragging) {
+  if (rotateEnabled && !earthControls.isDragging) {
     planet.rotate(0.0003);
   }
+  earthControls.update();
+  controls.update();
 
   markerManager.update(planet.getMesh());
 

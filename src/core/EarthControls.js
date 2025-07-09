@@ -5,7 +5,7 @@ export class EarthControls {
 
     this.isDragging = false;
     this.prevMouse = { x: 0, y: 0 };
-    this.rotationSpeed = 0.005;
+    this.rotationSpeed = 0.002;
 
     this.rotationVelocity = { x: 0, y: 0 };
 
