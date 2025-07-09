@@ -130,6 +130,7 @@ domElement.addEventListener('mousemove', (event) => {
 domElement.addEventListener('mouseup', () => {
   isDragging = false;
   activeControl = null;
+  controls.enable(); 
 });
 
 function animate() {
