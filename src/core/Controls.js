@@ -8,6 +8,15 @@ export class Controls {
 
     this.controls.minDistance = 16;
     this.controls.maxDistance= 1000;
+    this.controls.enabled = true;
+  }
+
+  enable() {
+    this.controls.enabled = true;
+  }
+
+  disable() {
+    this.controls.enabled = false;
   }
 
   update() {

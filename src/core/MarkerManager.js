@@ -7,17 +7,18 @@ export class MarkerManager {
     this.markers = [];
   }
 
-  addMarker({ lat, lon, label }) {
-    const marker = new Marker({
-      lat,
-      lon,
-      camera: this.camera,
-      renderer: this.renderer,
-      label,
-    });
-    this.markers.push(marker);
-    return marker;
-  }
+addMarker({ lat, lon, label }) {
+  const marker = new Marker({
+    lat,
+    lon,
+    camera: this.camera,
+    renderer: this.renderer,
+    label: '📍',
+    tooltipText: label, 
+  });
+  this.markers.push(marker);
+  return marker;
+}
 
 update(planetMesh) {
   this.markers.forEach(marker => marker.update(planetMesh));

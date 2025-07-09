@@ -5,11 +5,10 @@ export class Planet {
     this.radius = 15;
     this.scene = scene;
 
-  this.dayTexture = new THREE.TextureLoader().load('textures/earthmap.jpeg');
-  this.nightTexture = new THREE.TextureLoader().load('textures/earthmap_night.jpeg');
-  const bumpMap = new THREE.TextureLoader().load('textures/earthbump.jpeg');
-  const cloudsTexture = new THREE.TextureLoader().load('textures/earthCloud.png');
-
+    this.dayTexture = new THREE.TextureLoader().load('textures/earthmap.jpeg');
+    this.nightTexture = new THREE.TextureLoader().load('textures/earthmap_night.jpeg');
+    const bumpMap = new THREE.TextureLoader().load('textures/earthbump.jpeg');
+    const cloudsTexture = new THREE.TextureLoader().load('textures/earthCloud.png');
 
     this.material = new THREE.MeshStandardMaterial({
       map: this.dayTexture,
@@ -30,14 +29,16 @@ export class Planet {
 
     const cloudsGeometry = new THREE.SphereGeometry(this.radius * 1.01, 64, 32);
     this.cloudsMesh = new THREE.Mesh(cloudsGeometry, cloudsMaterial);
-    this.scene.add(this.cloudsMesh);
 
-    this.isNight = false; 
+    this.mesh.add(this.cloudsMesh);
+
+    this.isNight = false;
   }
 
   rotate(speed = 0.0005) {
     this.mesh.rotation.y += speed;
-    this.cloudsMesh.rotation.y += speed * 1.2;
+
+    this.cloudsMesh.rotation.y += speed * 0.4;
   }
 
   toggleTexture() {

@@ -2,14 +2,14 @@ import * as THREE from 'three';
 import './Marker.css';
 
 export class Marker {
-  constructor({ lat, lon, radius = 15, camera, renderer, label = '📍' }) {
+  constructor({ lat, lon, radius = 15, camera, renderer, label = '📍', tooltipText }) {
     this.lat = lat;
     this.lon = lon;
     this.radius = radius;
     this.camera = camera;
     this.renderer = renderer;
 
-    this.localPosition = this.convertLatLonToVec3(lat, lon, radius + 0.2);
+    this.localPosition = this.convertLatLonToVec3(lat, lon, radius);
 
     this.container = document.createElement('div');
     this.container.className = 'marker-container';
@@ -20,11 +20,19 @@ export class Marker {
 
     this.tooltip = document.createElement('div');
     this.tooltip.className = 'tooltip';
-    this.tooltip.textContent = `wwwww`;
+    this.tooltip.textContent = tooltipText || '';
 
     this.container.appendChild(this.el);
     this.container.appendChild(this.tooltip);
     document.body.appendChild(this.container);
+
+    this.el.addEventListener('mouseenter', () => {
+      this.tooltip.style.display = 'block';
+    });
+
+    this.el.addEventListener('mouseleave', () => {
+      this.tooltip.style.display = 'none';
+    });
   }
 
   convertLatLonToVec3(lat, lon, radius) {
@@ -41,20 +49,18 @@ export class Marker {
 update(planetMesh) {
   const pos = this.localPosition.clone();
   pos.applyQuaternion(planetMesh.quaternion);
-
+  
   const cameraPos = this.camera.position.clone();
+  const planetPos = planetMesh.position.clone();
 
-  const direction = pos.clone().sub(cameraPos).normalize();
-  const raycaster = new THREE.Raycaster(cameraPos, direction);
+  const markerDir = pos.clone().sub(planetPos).normalize();
 
-  const intersects = raycaster.intersectObject(planetMesh);
+  const cameraDir = cameraPos.clone().sub(planetPos).normalize();
 
-  const distanceToMarker = cameraPos.distanceTo(pos);
+  const dot = markerDir.dot(cameraDir);
 
-  const isOccluded = intersects.some(intersect => intersect.distance < distanceToMarker);
-
-  if (isOccluded) {
-    this.container.style.display = 'none'; 
+  if (dot <= 0) {
+    this.container.style.display = 'none';
     return;
   }
 
@@ -67,8 +73,12 @@ update(planetMesh) {
 
   const isVisible = vector.z < 1;
 
+  const distance = cameraPos.distanceTo(pos);
+  const scale = Math.min(Math.max((1 / distance) * 150, 0.4), 1.0);
+
   this.container.style.left = `${x}px`;
   this.container.style.top = `${y}px`;
+  this.container.style.transform = `translate(-50%, -50%) scale(${scale})`;
   this.container.style.display = isVisible ? 'block' : 'none';
 }
 

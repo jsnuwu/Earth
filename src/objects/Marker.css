@@ -1,16 +1,14 @@
 .marker-container {
   position: absolute;
-  transform: translate(-50%, -50%);
-  pointer-events: auto;
-  cursor: pointer;
+  pointer-events: none;
+  z-index: 10;
+  transform-origin: center center;
 }
 
 .marker {
-  font-size: 20px;
-  font-weight: bold;
-  font-style: italic;
-  color: white;
-  transition: transform 0.2s;
+  font-size: 30px;
+  pointer-events: auto;
+  cursor: pointer;
 }
 
 .marker:hover {
