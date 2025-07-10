@@ -32,7 +32,7 @@ sceneManager.add(planet.getMesh());
 sceneManager.add(stars.getMesh());
 
 const ambientLight = new THREE.AmbientLight(0xffffff, 0.2);
-const directionalLight = new THREE.DirectionalLight(0xffffff, 2);
+const directionalLight = new THREE.DirectionalLight(0xffffff, 1);
 directionalLight.position.set(30, 10, 50);
 sceneManager.add(ambientLight);
 sceneManager.add(directionalLight);
@@ -118,6 +118,7 @@ domElement.addEventListener("mouseup", () => {
   activeControl = null;
 });
 
+
 domElement.addEventListener("mousemove", (event) => {
   if (!isDragging) return;
 
@@ -142,6 +143,9 @@ domElement.addEventListener("mousemove", (event) => {
   prevMouse.x = event.clientX;
   prevMouse.y = event.clientY;
 });
+
+
+
 
 domElement.addEventListener("mouseup", () => {
   isDragging = false;

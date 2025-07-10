@@ -6,7 +6,7 @@
 }
 
 .marker {
-  font-size: 30px;
+  font-size: 15px;
   pointer-events: auto;
   cursor: pointer;
 }
@@ -17,7 +17,7 @@
 
 .tooltip {
   position: absolute;
-  top: 30px; 
+  top: 30px;
   left: 50%;
   transform: translateX(-50%);
   padding: 8px 12px;

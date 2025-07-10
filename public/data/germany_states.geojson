@@ -1,0 +1,21 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    { "type": "Feature", "properties": { "NAME_1": "Schleswig-Holstein" }, "geometry": { "type": "Polygon", "coordinates": [ [ [9,55],[10.5,55],[10.5,54],[9,54],[9,55] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Hamburg" }, "geometry": { "type": "Polygon", "coordinates": [ [ [9.8,54.2],[10.2,54.2],[10.2,53.8],[9.8,53.8],[9.8,54.2] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Niedersachsen" }, "geometry": { "type": "Polygon", "coordinates": [ [ [7,53],[11,53],[11,51],[7,51],[7,53] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Bremen" }, "geometry": { "type": "Polygon", "coordinates": [ [ [8.5,53.2],[9,53.2],[9,52.8],[8.5,52.8],[8.5,53.2] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Nordrhein-Westfalen" }, "geometry": { "type": "Polygon", "coordinates": [ [ [5.5,52.5],[8.5,52.5],[8.5,50.5],[5.5,50.5],[5.5,52.5] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Hesse" }, "geometry": { "type": "Polygon", "coordinates": [ [ [7,51.5],[9.5,51.5],[9.5,49.5],[7,49.5],[7,51.5] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Rheinland-Pfalz" }, "geometry": { "type": "Polygon", "coordinates": [ [ [6.5,51],[8,51],[8,49],[6.5,49],[6.5,51] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Baden-Württemberg" }, "geometry": { "type": "Polygon", "coordinates": [ [ [7.5,50.5],[10.5,50.5],[10.5,47.5],[7.5,47.5],[7.5,50.5] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Bayern" }, "geometry": { "type": "Polygon", "coordinates": [ [ [9,50.5],[13,50.5],[13,47],[9,47],[9,50.5] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Saarland" }, "geometry": { "type": "Polygon", "coordinates": [ [ [6.5,50],[7.5,50],[7.5,49],[6.5,49],[6.5,50] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Berlin" }, "geometry": { "type": "Polygon", "coordinates": [ [ [13.1,52.6],[13.7,52.6],[13.7,52.2],[13.1,52.2],[13.1,52.6] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Brandenburg" }, "geometry": { "type": "Polygon", "coordinates": [ [ [12,53],[15.5,53],[15.5,51],[12,51],[12,53] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Mecklenburg-Vorpommern" }, "geometry": { "type": "Polygon", "coordinates": [ [ [11.5,54.5],[14.5,54.5],[14.5,53],[11.5,53],[11.5,54.5] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Sachsen" }, "geometry": { "type": "Polygon", "coordinates": [ [ [12,51.5],[15,51.5],[15,50],[12,50],[12,51.5] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Sachsen-Anhalt" }, "geometry": { "type": "Polygon", "coordinates": [ [ [10.5,52.5],[13,52.5],[13,50.75],[10.5,50.75],[10.5,52.5] ] ] } },
+    { "type": "Feature", "properties": { "NAME_1": "Thüringen" }, "geometry": { "type": "Polygon", "coordinates": [ [ [9,51.5],[12,51.5],[12,50],[9,50],[9,51.5] ] ] } }
+  ]
+}
