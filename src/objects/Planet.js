@@ -7,7 +7,7 @@ export class Planet {
 
     const geometry = new THREE.SphereGeometry(this.radius, 64, 32);
     const material = new THREE.MeshStandardMaterial({
-      color: 0x2266dd, 
+      color: 0x2266dd,
       flatShading: false,
     });
 
@@ -53,7 +53,7 @@ export class Planet {
             polygon.forEach((ring) => {
               const points = ring.map(([lon, lat]) => {
                 const phi = (90 - lat) * (Math.PI / 180);
-                const theta = (lon - 180) * (Math.PI / 180);
+                const theta = -lon * (Math.PI / 180);
                 const r = this.radius + 0.05;
 
                 const x = r * Math.sin(phi) * Math.cos(theta);
@@ -64,16 +64,16 @@ export class Planet {
               });
 
               const geometry = new THREE.BufferGeometry().setFromPoints(points);
-              const material = new THREE.LineBasicMaterial({ color: 0x000000 }); 
-              
+              const material = new THREE.LineBasicMaterial({ color: 0x000000 });
+
               const line = new THREE.LineLoop(geometry, material);
 
               this.mesh.add(line);
               this.bundeslandMeshes.push(line);
 
-
-              
-              console.log(`→ ${feature.properties.NAME_1}: ${points.length} Punkte`);
+              console.log(
+                `→ ${feature.properties.NAME_1}: ${points.length} Punkte`
+              );
             });
           });
         });
