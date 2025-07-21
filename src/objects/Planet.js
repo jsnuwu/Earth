@@ -1,10 +1,13 @@
 import * as THREE from "three";
 
 export class Planet {
-  constructor(scene, rendererDomElement) {
+  constructor(scene, rendererDomElement, camera) {
     this.radius = 15;
     this.scene = scene;
     this.domElement = rendererDomElement;
+    this.camera = camera;
+    this.raycaster = new THREE.Raycaster();
+    this.raycaster.params.Line.threshold = 0.1;
 
     const geometry = new THREE.SphereGeometry(this.radius, 64, 32);
     const material = new THREE.MeshStandardMaterial({
@@ -15,7 +18,6 @@ export class Planet {
     this.mesh = new THREE.Mesh(geometry, material);
     this.scene.add(this.mesh);
 
-    this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
     this.hovered = null;
     this.bundeslandMeshes = [];
@@ -70,6 +72,12 @@ export class Planet {
               const material = new THREE.LineBasicMaterial({ color: 0x000000 });
 
               const line = new THREE.LineLoop(geometry, material);
+
+              line.userData = {
+                name: name,
+                originalColor: material.color.clone(),
+              };
+
               this.mesh.add(line);
               this.bundeslandMeshes.push(line);
             });
@@ -97,7 +105,6 @@ export class Planet {
 
         features.forEach((feature) => {
           const name = feature.properties.NAME || "Unbekannt";
-
           const type = feature.geometry.type;
           const coords = feature.geometry.coordinates;
 
@@ -121,6 +128,12 @@ export class Planet {
               const material = new THREE.LineBasicMaterial({ color: 0x000000 });
 
               const line = new THREE.LineLoop(geometry, material);
+
+              line.userData = {
+                name: name,
+                originalColor: material.color.clone(),
+              };
+
               this.mesh.add(line);
               this.bundeslandMeshes.push(line);
             });
@@ -134,4 +147,35 @@ export class Planet {
       });
   }
 
+  onMouseMove(event) {
+    const rect = this.domElement.getBoundingClientRect();
+    this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+    this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+    this.raycaster.setFromCamera(this.mouse, this.camera.getCamera());
+
+    const intersects = this.raycaster.intersectObjects(
+      this.bundeslandMeshes,
+      true
+    );
+
+    if (intersects.length === 0) {
+      if (this.hovered) {
+        this.hovered.material.color.copy(this.hovered.userData.originalColor);
+        this.hovered = null;
+      }
+      return;
+    }
+
+    const obj = intersects[0].object;
+
+    if (this.hovered !== obj) {
+      if (this.hovered) {
+        this.hovered.material.color.copy(this.hovered.userData.originalColor);
+      }
+
+      obj.material.color.set(0xff0000);
+      this.hovered = obj;
+    }
+  }
 }

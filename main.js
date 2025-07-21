@@ -20,13 +20,10 @@ let rotateEnabled = true;
 const sceneManager = new SceneManager();
 const camera = new Camera();
 const renderer = new Renderer();
-const planet = new Planet(sceneManager.getScene(), renderer.getRenderer().domElement);
+const planet = new Planet(sceneManager.getScene(), renderer.getRenderer().domElement, camera);
 const stars = new Stars(2000);
 const earthControls = new EarthControls(planet.getMesh(), renderer.getRenderer().domElement);
-const controls = new Controls(
-  camera.getCamera(),
-  renderer.getRenderer().domElement
-);
+const controls = new Controls(camera.getCamera(), renderer.getRenderer().domElement);
 
 sceneManager.add(planet.getMesh());
 sceneManager.add(stars.getMesh());
@@ -48,25 +45,8 @@ moonLight.castShadow = true;
 sceneManager.add(sunLight);
 sceneManager.add(moonLight);
 
+const markerManager = new MarkerManager(camera.getCamera(), renderer.getRenderer());
 
-const markerManager = new MarkerManager(
-  camera.getCamera(),
-  renderer.getRenderer()
-);
-/*
-markerManager.addMarker({ lat: 53.5511, lon: 9.9937, label: "Hamburg" });
-markerManager.addMarker({ lat: 49.4521, lon: 11.0767, label: "Nürnberg" });
-markerManager.addMarker({ lat: 51.7191, lon: 8.754, label: "Paderborn" });
-markerManager.addMarker({ lat: 49.233, lon: 6.995, label: "Saarbrücken" });
-markerManager.addMarker({ lat: 50.9271, lon: 6.9603, label: "Köln" });
-markerManager.addMarker({ lat: 48.7758, lon: 9.1829, label: "Stuttgart" });
-markerManager.addMarker({ lat: 48.125, lon: 11.575, label: "München" });
-markerManager.addMarker({ lat: 52.52, lon: 13.405, label: "Berlin" });
-markerManager.addMarker({ lat: 52.3759, lon: 9.732, label: "Hannover" });
-markerManager.addMarker({ lat: 49.0069, lon: 8.4037, label: "Karlsruhe" });
-markerManager.addMarker({ lat: 54.3233, lon: 10.1228, label: "Kiel" });
-markerManager.addMarker({ lat: 49.2747, lon: 8.6457, label: "Walldorf" });
-*/
 btnRotate.addEventListener("click", () => {
   rotateEnabled = !rotateEnabled;
   btnRotate.textContent = rotateEnabled ? "Rotation Off" : "Rotation On";
@@ -74,9 +54,7 @@ btnRotate.addEventListener("click", () => {
 
 btnToggleTexture.addEventListener("click", () => {
   planet.toggleTexture();
-  btnToggleTexture.textContent = planet.isNight
-    ? "Switch to Day"
-    : "Switch to Night";
+  btnToggleTexture.textContent = planet.isNight ? "Switch to Day" : "Switch to Night";
 });
 
 window.addEventListener("resize", () => {
@@ -84,21 +62,23 @@ window.addEventListener("resize", () => {
   renderer.resize();
 });
 
-const raycaster = new THREE.Raycaster();
-const mouse = new THREE.Vector2();
-
 let isDragging = false;
 let prevMouse = { x: 0, y: 0 };
-
-const domElement = renderer.getRenderer().domElement;
-
 let activeControl = null;
 
+const raycaster = new THREE.Raycaster();
+const mouse = new THREE.Vector2();
+const domElement = renderer.getRenderer().domElement;
+
+// --- MOUSE EVENTS ---
+
 domElement.addEventListener("mousedown", (event) => {
-  const mouse = new THREE.Vector2(
-    (event.clientX / window.innerWidth) * 2 - 1,
-    -(event.clientY / window.innerHeight) * 2 + 1
-  );
+  isDragging = true;
+  prevMouse.x = event.clientX;
+  prevMouse.y = event.clientY;
+
+  mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+  mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
 
   raycaster.setFromCamera(mouse, camera.getCamera());
   const intersects = raycaster.intersectObject(planet.getMesh(), true);
@@ -115,11 +95,15 @@ domElement.addEventListener("mousedown", (event) => {
 });
 
 domElement.addEventListener("mouseup", () => {
+  isDragging = false;
   activeControl = null;
+  earthControls.disable();
+  controls.enable();
 });
 
-
 domElement.addEventListener("mousemove", (event) => {
+  planet.onMouseMove(event); 
+
   if (!isDragging) return;
 
   const deltaX = event.clientX - prevMouse.x;
@@ -130,10 +114,7 @@ domElement.addEventListener("mousemove", (event) => {
     planet.getMesh().rotation.x += deltaY * 0.005;
 
     const limit = Math.PI / 2;
-    planet.getMesh().rotation.x = Math.max(
-      -limit,
-      Math.min(limit, planet.getMesh().rotation.x)
-    );
+    planet.getMesh().rotation.x = Math.max(-limit, Math.min(limit, planet.getMesh().rotation.x));
   } else if (activeControl === "orbit") {
     controls.controls.rotateLeft(deltaX * 0.005);
     controls.controls.rotateUp(deltaY * 0.005);
@@ -144,33 +125,18 @@ domElement.addEventListener("mousemove", (event) => {
   prevMouse.y = event.clientY;
 });
 
-window.addEventListener("mousemove", (event) => {
-  planet.onMouseMove(event); 
-});
-
-domElement.addEventListener("mouseup", () => {
-  isDragging = false;
-  activeControl = null;
-  controls.enable();
-});
+// --- ANIMATION LOOP ---
 
 function animate() {
   requestAnimationFrame(animate);
 
-  const camPos = camera.getCamera().position;
-  const earthPos = planet.getMesh().position;
-
   if (rotateEnabled && !earthControls.isDragging) {
     planet.rotate(0.0003);
   }
+
   earthControls.update();
   controls.update();
-
   markerManager.update(planet.getMesh());
-
-  if (activeControl !== "earth") {
-    controls.update();
-  }
 
   renderer.getRenderer().render(sceneManager.getScene(), camera.getCamera());
 }
