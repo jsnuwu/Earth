@@ -20,7 +20,7 @@ let rotateEnabled = true;
 const sceneManager = new SceneManager();
 const camera = new Camera();
 const renderer = new Renderer();
-const planet = new Planet(sceneManager.getScene());
+const planet = new Planet(sceneManager.getScene(), renderer.getRenderer().domElement);
 const stars = new Stars(2000);
 const earthControls = new EarthControls(planet.getMesh(), renderer.getRenderer().domElement);
 const controls = new Controls(
@@ -144,8 +144,9 @@ domElement.addEventListener("mousemove", (event) => {
   prevMouse.y = event.clientY;
 });
 
-
-
+window.addEventListener("mousemove", (event) => {
+  planet.onMouseMove(event); 
+});
 
 domElement.addEventListener("mouseup", () => {
   isDragging = false;
@@ -158,7 +159,6 @@ function animate() {
 
   const camPos = camera.getCamera().position;
   const earthPos = planet.getMesh().position;
-  const camDistance = camPos.distanceTo(earthPos);
 
   if (rotateEnabled && !earthControls.isDragging) {
     planet.rotate(0.0003);
