@@ -11,32 +11,52 @@ export class HoverHandler {
     this.hovered = null;
   }
 
-  handle(event) {
-    const rect = this.domElement.getBoundingClientRect();
-    this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
-    this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+handle(event) {
+  const rect = this.domElement.getBoundingClientRect();
+  this.mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+  this.mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
 
-    this.raycaster.setFromCamera(this.mouse, this.camera.getCamera());
+  this.raycaster.setFromCamera(this.mouse, this.camera.getCamera());
 
-    const intersects = this.raycaster.intersectObjects(this.objects, true);
+  const intersects = this.raycaster.intersectObjects(this.objects, true);
 
-    if (intersects.length === 0) {
-      if (this.hovered) {
-        this.hovered.material.color.copy(this.hovered.userData.originalColor);
-        this.hovered = null;
+  if (intersects.length === 0) {
+    if (this.hovered) {
+      this.hovered.material.color.copy(this.hovered.userData.originalColor);
+
+      if (this.hovered.userData.originalScale) {
+        this.hovered.scale.copy(this.hovered.userData.originalScale);
+      } else {
+        this.hovered.scale.set(1,1,1);
       }
-      return;
+      this.hovered = null;
     }
-
-    const obj = intersects[0].object;
-
-    if (this.hovered !== obj) {
-      if (this.hovered) {
-        this.hovered.material.color.copy(this.hovered.userData.originalColor);
-      }
-
-      obj.material.color.set(0xff0000);
-      this.hovered = obj;
-    }
+    return;
   }
+
+  const obj = intersects[0].object;
+
+  if (this.hovered !== obj) {
+    if (this.hovered) {
+      this.hovered.material.color.copy(this.hovered.userData.originalColor);
+      if (this.hovered.userData.originalScale) {
+        this.hovered.scale.copy(this.hovered.userData.originalScale);
+      } else {
+        this.hovered.scale.set(0.5,0.5,0.5);
+      }
+    }
+
+    obj.material.color.set(0xff0000);
+
+    if (!obj.userData.originalScale) {
+      obj.userData.originalScale = obj.scale.clone();
+    }
+
+    obj.scale.set(1.05, 1.05, 1.05);
+
+    this.hovered = obj;
+  }
+}
+
+
 }
