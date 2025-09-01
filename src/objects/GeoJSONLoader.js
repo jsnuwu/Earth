@@ -45,7 +45,7 @@ export class GeoJSONLoader {
             mesh.userData = {
               name,
               originalColor: material.color.clone(),
-              source: url
+              source: url,
             };
             this.parentMesh.add(mesh);
 

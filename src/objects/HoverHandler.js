@@ -39,14 +39,17 @@ export class HoverHandler {
     }
 
     const obj = intersects[0].object;
-    
-if (!obj.userData.source || !obj.userData.source.includes("bundeslaender.geo.json")) {
-  if (this.hovered) {
-    this._resetHover(this.hovered);
-    this.hovered = null;
-  }
-  return;
-}
+
+    if (
+      !obj.userData.source ||
+      !obj.userData.source.includes("bundeslaender.geo.json")
+    ) {
+      if (this.hovered) {
+        this._resetHover(this.hovered);
+        this.hovered = null;
+      }
+      return;
+    }
     if (this.hovered !== obj) {
       if (this.hovered) {
         this.hovered.material.color.copy(this.hovered.userData.originalColor);
@@ -57,23 +60,23 @@ if (!obj.userData.source || !obj.userData.source.includes("bundeslaender.geo.jso
         }
       }
 
-      obj.material.color.set(0x00008B);
+      obj.material.color.set(0x00008b);
 
       if (!obj.userData.originalScale) {
         obj.userData.originalScale = obj.scale.clone();
       }
 
-      obj.scale.set(1.009, 1.009, 1.009);
+      obj.scale.set(1.008, 1.008, 1.008);
 
       this.hovered = obj;
     }
   }
   _resetHover(obj) {
-  obj.material.color.copy(obj.userData.originalColor);
-  if (obj.userData.originalScale) {
-    obj.scale.copy(obj.userData.originalScale);
-  } else {
-    obj.scale.set(1, 1, 1);
+    obj.material.color.copy(obj.userData.originalColor);
+    if (obj.userData.originalScale) {
+      obj.scale.copy(obj.userData.originalScale);
+    } else {
+      obj.scale.set(1, 1, 1);
+    }
   }
-}
 }
