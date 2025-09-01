@@ -20,11 +20,19 @@ export class Planet {
 
     this.bundeslandMeshes = [];
 
-    const loader = new GeoJSONLoader(this.radius, this.mesh, this.bundeslandMeshes);
-    loader.load("data/custom.geo.json", "NAME_1");
-    loader.load("data/bundeslaender.geo.json", "NAME");
+    const loader = new GeoJSONLoader(
+      this.radius,
+      this.mesh,
+      this.bundeslandMeshes
+    );
+    loader.load("data/custom.geo.json");
+    loader.load("data/bundeslaender.geo.json");
 
-    this.hoverHandler = new HoverHandler(this.camera, this.domElement, this.bundeslandMeshes);
+    this.hoverHandler = new HoverHandler(
+      this.camera,
+      this.domElement,
+      this.bundeslandMeshes
+    );
   }
 
   rotate(speed = 0.0005) {

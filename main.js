@@ -20,10 +20,20 @@ let rotateEnabled = true;
 const sceneManager = new SceneManager();
 const camera = new Camera();
 const renderer = new Renderer();
-const planet = new Planet(sceneManager.getScene(), renderer.getRenderer().domElement, camera);
+const planet = new Planet(
+  sceneManager.getScene(),
+  renderer.getRenderer().domElement,
+  camera
+);
 const stars = new Stars(2000);
-const earthControls = new EarthControls(planet.getMesh(), renderer.getRenderer().domElement);
-const controls = new Controls(camera.getCamera(), renderer.getRenderer().domElement);
+const earthControls = new EarthControls(
+  planet.getMesh(),
+  renderer.getRenderer().domElement
+);
+const controls = new Controls(
+  camera.getCamera(),
+  renderer.getRenderer().domElement
+);
 
 sceneManager.add(planet.getMesh());
 sceneManager.add(stars.getMesh());
@@ -45,7 +55,10 @@ moonLight.castShadow = true;
 sceneManager.add(sunLight);
 sceneManager.add(moonLight);
 
-const markerManager = new MarkerManager(camera.getCamera(), renderer.getRenderer());
+const markerManager = new MarkerManager(
+  camera.getCamera(),
+  renderer.getRenderer()
+);
 
 btnRotate.addEventListener("click", () => {
   rotateEnabled = !rotateEnabled;
@@ -54,7 +67,9 @@ btnRotate.addEventListener("click", () => {
 
 btnToggleTexture.addEventListener("click", () => {
   planet.toggleTexture();
-  btnToggleTexture.textContent = planet.isNight ? "Switch to Day" : "Switch to Night";
+  btnToggleTexture.textContent = planet.isNight
+    ? "Switch to Day"
+    : "Switch to Night";
 });
 
 window.addEventListener("resize", () => {
@@ -102,7 +117,7 @@ domElement.addEventListener("mouseup", () => {
 });
 
 domElement.addEventListener("mousemove", (event) => {
-  planet.onMouseMove(event); 
+  planet.onMouseMove(event);
 
   if (!isDragging) return;
 
@@ -114,7 +129,10 @@ domElement.addEventListener("mousemove", (event) => {
     planet.getMesh().rotation.x += deltaY * 0.005;
 
     const limit = Math.PI / 2;
-    planet.getMesh().rotation.x = Math.max(-limit, Math.min(limit, planet.getMesh().rotation.x));
+    planet.getMesh().rotation.x = Math.max(
+      -limit,
+      Math.min(limit, planet.getMesh().rotation.x)
+    );
   } else if (activeControl === "orbit") {
     controls.controls.rotateLeft(deltaX * 0.005);
     controls.controls.rotateUp(deltaY * 0.005);

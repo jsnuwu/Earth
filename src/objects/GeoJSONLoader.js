@@ -5,7 +5,7 @@ export class GeoJSONLoader {
   constructor(radius, parentMesh, meshArray) {
     this.radius = radius;
     this.parentMesh = parentMesh;
-    this.meshArray = meshArray; // Enthält nur die Flächen-Meshes für Hover
+    this.meshArray = meshArray;
     this.namedGroups = {};
   }
 
@@ -24,10 +24,15 @@ export class GeoJSONLoader {
           const polygons = geometryType === "MultiPolygon" ? coords : [coords];
 
           polygons.forEach((polygon) => {
-            // 1. Fläche erstellen (für Hover und Füllung)
             const shape = this._createShape(polygon);
-            const geometry2D = new THREE.ShapeGeometry(shape);
-            const geometry3D = this._projectShapeToSphere(geometry2D);
+
+            const extrudeSettings = { depth: 0.05, bevelEnabled: false };
+            const geometry3D = new THREE.ExtrudeGeometry(
+              shape,
+              extrudeSettings
+            );
+
+            const geometryOnSphere = this._projectShapeToSphere(geometry3D);
 
             const material = new THREE.MeshStandardMaterial({
               color: 0x2266dd,
@@ -36,28 +41,33 @@ export class GeoJSONLoader {
               side: THREE.DoubleSide,
             });
 
-            const mesh = new THREE.Mesh(geometry3D, material);
+            const mesh = new THREE.Mesh(geometryOnSphere, material);
             mesh.userData = {
               name,
               originalColor: material.color.clone(),
             };
-
             this.parentMesh.add(mesh);
+
             this.meshArray.push(mesh);
 
             if (!this.namedGroups[name]) this.namedGroups[name] = [];
             this.namedGroups[name].push(mesh);
 
-            // 2. Linien erzeugen (nur zur Optik, nicht für Hover)
             polygon.forEach((ring) => {
               const outlinePoints = ring.map(([lon, lat]) =>
                 convertCoordsToSphere(lat, lon, this.radius + 0.01)
               );
-              const outlineGeometry = new THREE.BufferGeometry().setFromPoints(outlinePoints);
-              const outlineMaterial = new THREE.LineBasicMaterial({ color: 0x000000 });
-              const outline = new THREE.LineLoop(outlineGeometry, outlineMaterial);
+              const outlineGeometry = new THREE.BufferGeometry().setFromPoints(
+                outlinePoints
+              );
+              const outlineMaterial = new THREE.LineBasicMaterial({
+                color: 0x000000,
+              });
+              const outline = new THREE.LineLoop(
+                outlineGeometry,
+                outlineMaterial
+              );
               this.parentMesh.add(outline);
-              // NICHT in meshArray aufnehmen, damit Hover nur auf Flächen läuft
             });
           });
 
@@ -74,19 +84,15 @@ export class GeoJSONLoader {
     const shape = new THREE.Shape();
 
     outer.forEach(([lon, lat], i) => {
-      const x = lon;
-      const y = lat;
-      if (i === 0) shape.moveTo(x, y);
-      else shape.lineTo(x, y);
+      if (i === 0) shape.moveTo(lon, lat);
+      else shape.lineTo(lon, lat);
     });
 
     holes.forEach((holeCoords) => {
       const hole = new THREE.Path();
       holeCoords.forEach(([lon, lat], i) => {
-        const x = lon;
-        const y = lat;
-        if (i === 0) hole.moveTo(x, y);
-        else hole.lineTo(x, y);
+        if (i === 0) hole.moveTo(lon, lat);
+        else hole.lineTo(lon, lat);
       });
       shape.holes.push(hole);
     });
@@ -94,15 +100,14 @@ export class GeoJSONLoader {
     return shape;
   }
 
-  _projectShapeToSphere(geometry2D) {
-    const pos = geometry2D.attributes.position;
+  _projectShapeToSphere(geometry, offset = -0.1) {
+    const pos = geometry.attributes.position;
     const newPos = [];
 
     for (let i = 0; i < pos.count; i++) {
       const lon = pos.getX(i);
       const lat = pos.getY(i);
-
-      const point = convertCoordsToSphere(lat, lon, this.radius + 0.01);
+      const point = convertCoordsToSphere(lat, lon, this.radius + offset);
       newPos.push(point.x, point.y, point.z);
     }
 
@@ -111,7 +116,7 @@ export class GeoJSONLoader {
       "position",
       new THREE.Float32BufferAttribute(newPos, 3)
     );
-    geometry3D.setIndex(geometry2D.index);
+    if (geometry.index) geometry3D.setIndex(geometry.index);
     geometry3D.computeVertexNormals();
 
     return geometry3D;
