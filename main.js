@@ -12,6 +12,7 @@ import { EarthControls } from "./src/core/EarthControls.js";
 
 document.body.insertAdjacentHTML("afterbegin", navigation);
 
+
 const btnRotate = document.getElementById("btnRotation");
 const btnToggleTexture = document.getElementById("btnToggleTexture");
 
@@ -55,10 +56,35 @@ moonLight.castShadow = true;
 sceneManager.add(sunLight);
 sceneManager.add(moonLight);
 
-const markerManager = new MarkerManager(
-  camera.getCamera(),
-  renderer.getRenderer()
-);
+const markerManager = new MarkerManager(camera.getCamera(), renderer.getRenderer());
+
+const bundeslandHauptstaedte = [
+  { name: "Berlin", lat: 52.5200, lon: 13.4050 },
+  { name: "Hamburg", lat: 53.5511, lon: 9.9937 },
+  { name: "München (Bayern)", lat: 48.1351, lon: 11.5820 },
+  { name: "Dresden (Sachsen)", lat: 51.0504, lon: 13.7373 },
+  { name: "Stuttgart (Baden-Württemberg)", lat: 48.7758, lon: 9.1829 },
+  { name: "Wiesbaden (Hessen)", lat: 50.0826, lon: 8.24 },
+  { name: "Mainz (Rheinland-Pfalz)", lat: 49.9929, lon: 8.2473 },
+  { name: "Düsseldorf (NRW)", lat: 51.2277, lon: 6.7735 },
+  { name: "Magdeburg (Sachsen-Anhalt)", lat: 52.1205, lon: 11.6276 },
+  { name: "Potsdam (Brandenburg)", lat: 52.3906, lon: 13.0645 },
+  { name: "Schwerin (Mecklenburg-Vorpommern)", lat: 53.6294, lon: 11.4148 },
+  { name: "Kiel (Schleswig-Holstein)", lat: 54.3233, lon: 10.1228 },
+  { name: "Erfurt (Thüringen)", lat: 50.9848, lon: 11.0299 },
+  { name: "Bremen", lat: 53.0793, lon: 8.8017 },
+  { name: "Saarbrücken (Saarland)", lat: 49.2402, lon: 6.9969 },
+];
+
+bundeslandHauptstaedte.forEach((stadt) => {
+  markerManager.addMarker({
+    lat: stadt.lat,
+    lon: stadt.lon,
+    label: "📍",
+    tooltipText: stadt.name
+  });
+});
+
 
 btnRotate.addEventListener("click", () => {
   rotateEnabled = !rotateEnabled;

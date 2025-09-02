@@ -2,15 +2,7 @@ import * as THREE from "three";
 import "./Marker.css";
 
 export class Marker {
-  constructor({
-    lat,
-    lon,
-    radius = 15,
-    camera,
-    renderer,
-    label = "📍",
-    tooltipText,
-  }) {
+  constructor({ lat, lon, radius = 15, camera, renderer, label = "📍", tooltipText }) {
     this.lat = lat;
     this.lon = lon;
     this.radius = radius;
@@ -19,6 +11,7 @@ export class Marker {
 
     this.localPosition = this.convertLatLonToVec3(lat, lon, radius);
 
+    // DOM-Elemente
     this.container = document.createElement("div");
     this.container.className = "marker-container";
 
@@ -34,10 +27,10 @@ export class Marker {
     this.container.appendChild(this.tooltip);
     document.body.appendChild(this.container);
 
+    // Hover
     this.el.addEventListener("mouseenter", () => {
       this.tooltip.style.display = "block";
     });
-
     this.el.addEventListener("mouseleave", () => {
       this.tooltip.style.display = "none";
     });
@@ -62,9 +55,7 @@ export class Marker {
     const planetPos = planetMesh.position.clone();
 
     const markerDir = pos.clone().sub(planetPos).normalize();
-
     const cameraDir = cameraPos.clone().sub(planetPos).normalize();
-
     const dot = markerDir.dot(cameraDir);
 
     if (dot <= 0) {
@@ -79,15 +70,13 @@ export class Marker {
     const x = vector.x * widthHalf + widthHalf;
     const y = -vector.y * heightHalf + heightHalf;
 
-    const isVisible = vector.z < 1;
-
     const distance = cameraPos.distanceTo(pos);
     const scale = Math.min(Math.max((1 / distance) * 150, 0.4), 1.0);
 
     this.container.style.left = `${x}px`;
     this.container.style.top = `${y}px`;
     this.container.style.transform = `translate(-50%, -50%) scale(${scale})`;
-    this.container.style.display = isVisible ? "block" : "none";
+    this.container.style.display = vector.z < 1 ? "block" : "none";
   }
 
   dispose() {

@@ -1,4 +1,4 @@
-import { Marker } from "../objects/Marker";
+import { Marker } from "../objects/Marker.js";
 
 export class MarkerManager {
   constructor(camera, renderer) {
@@ -7,14 +7,14 @@ export class MarkerManager {
     this.markers = [];
   }
 
-  addMarker({ lat, lon, label }) {
+  addMarker({ lat, lon, label = "📍", tooltipText }) {
     const marker = new Marker({
       lat,
       lon,
       camera: this.camera,
       renderer: this.renderer,
-      label: "📍",
-      tooltipText: label,
+      label,
+      tooltipText,  
     });
     this.markers.push(marker);
     return marker;
