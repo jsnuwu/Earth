@@ -8,7 +8,7 @@ export class Marker {
     radius = 15,
     camera,
     renderer,
-    label = "📍",
+    label = "",
     tooltipText,
   }) {
     this.lat = lat;
@@ -16,10 +16,10 @@ export class Marker {
     this.radius = radius;
     this.camera = camera;
     this.renderer = renderer;
+    this.tooltipVisible = false;
 
     this.localPosition = this.convertLatLonToVec3(lat, lon, radius);
 
-    // DOM-Elemente
     this.container = document.createElement("div");
     this.container.className = "marker-container";
 
@@ -35,12 +35,30 @@ export class Marker {
     this.container.appendChild(this.tooltip);
     document.body.appendChild(this.container);
 
-    // Hover
     this.el.addEventListener("mouseenter", () => {
-      this.tooltip.style.display = "block";
+      if (!this.tooltipVisible) {
+        this.tooltip.style.display = "block";
+      }
     });
     this.el.addEventListener("mouseleave", () => {
-      this.tooltip.style.display = "none";
+      if (!this.tooltipVisible) {
+        this.tooltip.style.display = "none";
+      }
+    });
+
+    this.el.addEventListener("click", (e) => {
+      e.stopPropagation(); 
+      this.tooltipVisible = !this.tooltipVisible;
+      this.tooltip.style.display = this.tooltipVisible ? "block" : "none";
+
+      document.body.appendChild(this.container);
+    });
+
+    document.body.addEventListener("click", () => {
+      if (this.tooltipVisible) {
+        this.tooltipVisible = false;
+        this.tooltip.style.display = "none";
+      }
     });
   }
 
@@ -56,36 +74,45 @@ export class Marker {
   }
 
   update(planetMesh) {
-    const pos = this.localPosition.clone();
-    pos.applyQuaternion(planetMesh.quaternion);
+  const pos = this.localPosition.clone();
+  pos.applyQuaternion(planetMesh.quaternion);
 
-    const cameraPos = this.camera.position.clone();
-    const planetPos = planetMesh.position.clone();
+  const cameraPos = this.camera.position;
+  const planetPos = planetMesh.position;
 
-    const markerDir = pos.clone().sub(planetPos).normalize();
-    const cameraDir = cameraPos.clone().sub(planetPos).normalize();
-    const dot = markerDir.dot(cameraDir);
+  const markerDir = pos.clone().sub(planetPos).normalize();
+  const cameraDir = cameraPos.clone().sub(planetPos).normalize();
+  const dot = markerDir.dot(cameraDir);
 
-    if (dot <= 0) {
-      this.container.style.display = "none";
-      return;
-    }
-
-    const vector = pos.project(this.camera);
-    const widthHalf = 0.5 * this.renderer.domElement.clientWidth;
-    const heightHalf = 0.5 * this.renderer.domElement.clientHeight;
-
-    const x = vector.x * widthHalf + widthHalf;
-    const y = -vector.y * heightHalf + heightHalf;
-
-    const distance = cameraPos.distanceTo(pos);
-    const scale = Math.min(Math.max((1 / distance) * 150, 0.4), 1.0);
-
-    this.container.style.left = `${x}px`;
-    this.container.style.top = `${y}px`;
-    this.container.style.transform = `translate(-50%, -50%) scale(${scale})`;
-    this.container.style.display = vector.z < 1 ? "block" : "none";
+  if (dot <= 0) {
+    this.container.style.opacity = "0";
+    this.container.style.visibility = "hidden";
+    return;
   }
+
+  const vector = pos.project(this.camera);
+  const widthHalf = 0.5 * this.renderer.domElement.clientWidth;
+  const heightHalf = 0.5 * this.renderer.domElement.clientHeight;
+
+  const x = vector.x * widthHalf + widthHalf;
+  const y = -vector.y * heightHalf + heightHalf;
+
+  const maxVisibleDistanceSq = 60 * 60;
+  const distanceSq = cameraPos.distanceToSquared(pos);
+
+  if (distanceSq > maxVisibleDistanceSq) {
+    this.container.style.opacity = "0";
+    this.container.style.visibility = "hidden";
+    return;
+  }
+
+  this.container.style.left = `${x}px`;
+  this.container.style.top = `${y}px`;
+  this.container.style.transform = `translate(-50%, -50%)`;
+  this.container.style.opacity = "1";
+  this.container.style.visibility = "visible";
+}
+
 
   dispose() {
     this.el.remove();
