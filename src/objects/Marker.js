@@ -2,7 +2,15 @@ import * as THREE from "three";
 import "./Marker.css";
 
 export class Marker {
-  constructor({ lat, lon, radius = 15, camera, renderer, label = "📍", tooltipText }) {
+  constructor({
+    lat,
+    lon,
+    radius = 15,
+    camera,
+    renderer,
+    label = "📍",
+    tooltipText,
+  }) {
     this.lat = lat;
     this.lon = lon;
     this.radius = radius;

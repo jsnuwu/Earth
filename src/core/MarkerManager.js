@@ -14,7 +14,7 @@ export class MarkerManager {
       camera: this.camera,
       renderer: this.renderer,
       label,
-      tooltipText,  
+      tooltipText,
     });
     this.markers.push(marker);
     return marker;

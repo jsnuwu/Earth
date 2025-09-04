@@ -12,7 +12,6 @@ import { EarthControls } from "./src/core/EarthControls.js";
 
 document.body.insertAdjacentHTML("afterbegin", navigation);
 
-
 const btnRotate = document.getElementById("btnRotation");
 const btnToggleTexture = document.getElementById("btnToggleTexture");
 
@@ -56,12 +55,15 @@ moonLight.castShadow = true;
 sceneManager.add(sunLight);
 sceneManager.add(moonLight);
 
-const markerManager = new MarkerManager(camera.getCamera(), renderer.getRenderer());
+const markerManager = new MarkerManager(
+  camera.getCamera(),
+  renderer.getRenderer()
+);
 
 const bundeslandHauptstaedte = [
-  { name: "Berlin", lat: 52.5200, lon: 13.4050 },
+  { name: "Berlin", lat: 52.52, lon: 13.405 },
   { name: "Hamburg", lat: 53.5511, lon: 9.9937 },
-  { name: "München (Bayern)", lat: 48.1351, lon: 11.5820 },
+  { name: "München (Bayern)", lat: 48.1351, lon: 11.582 },
   { name: "Dresden (Sachsen)", lat: 51.0504, lon: 13.7373 },
   { name: "Stuttgart (Baden-Württemberg)", lat: 48.7758, lon: 9.1829 },
   { name: "Wiesbaden (Hessen)", lat: 50.0826, lon: 8.24 },
@@ -80,11 +82,10 @@ bundeslandHauptstaedte.forEach((stadt) => {
   markerManager.addMarker({
     lat: stadt.lat,
     lon: stadt.lon,
-    label: "📍",
-    tooltipText: stadt.name
+    label: "",
+    tooltipText: stadt.name,
   });
 });
-
 
 btnRotate.addEventListener("click", () => {
   rotateEnabled = !rotateEnabled;
