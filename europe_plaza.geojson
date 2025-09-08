@@ -1,0 +1,45 @@
+{
+"type": "FeatureCollection",
+"features": [
+{
+  "type": "Feature",
+  "id": "way/10",
+  "properties": {
+    "building": "commercial",
+    "building:levels": "6",
+    "building:material": "glass",
+    "name": "Europe Plaza",
+    "roof:shape": "flat",
+    "website": "http://www.europe-plaza.de/",
+    "id": "way/10"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [
+          9.175,
+          48.7835
+        ],
+        [
+          9.1752,
+          48.7835
+        ],
+        [
+          9.1752,
+          48.7836
+        ],
+        [
+          9.175,
+          48.7836
+        ],
+        [
+          9.175,
+          48.7835
+        ]
+      ]
+    ]
+  }
+}
+]
+}
