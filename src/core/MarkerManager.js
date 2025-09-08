@@ -7,7 +7,7 @@ export class MarkerManager {
     this.markers = [];
   }
 
-  addMarker({ lat, lon, label = "📍", tooltipText }) {
+  addMarker({ lat, lon, label = "", tooltipText, tooltipLink }) {
     const marker = new Marker({
       lat,
       lon,
@@ -15,6 +15,7 @@ export class MarkerManager {
       renderer: this.renderer,
       label,
       tooltipText,
+      tooltipLink,
     });
     this.markers.push(marker);
     return marker;

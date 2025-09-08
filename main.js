@@ -65,7 +65,12 @@ const bundeslandHauptstaedte = [
   { name: "Hamburg", lat: 53.5511, lon: 9.9937 },
   { name: "München (Bayern)", lat: 48.1351, lon: 11.582 },
   { name: "Dresden (Sachsen)", lat: 51.0504, lon: 13.7373 },
-  { name: "Stuttgart (Baden-Württemberg)", lat: 48.7758, lon: 9.1829 },
+  {
+    name: "Stuttgart (Baden-Württemberg)",
+    lat: 48.7758,
+    lon: 9.1829,
+    tooltipLink: "/Earth/stutti.html",
+  },
   { name: "Wiesbaden (Hessen)", lat: 50.0826, lon: 8.24 },
   { name: "Mainz (Rheinland-Pfalz)", lat: 49.9929, lon: 8.2473 },
   { name: "Düsseldorf (NRW)", lat: 51.2277, lon: 6.7735 },
@@ -84,6 +89,7 @@ bundeslandHauptstaedte.forEach((stadt) => {
     lon: stadt.lon,
     label: "",
     tooltipText: stadt.name,
+    tooltipLink: stadt.tooltipLink,
   });
 });
 

@@ -9,8 +9,8 @@ export class HoverHandler {
     this.raycaster = new THREE.Raycaster();
     this.mouse = new THREE.Vector2();
 
-    this.hovered = null;     // gerade gehovertes Objekt
-    this.selected = null;    // fixiertes Objekt
+    this.hovered = null; 
+    this.selected = null; 
 
     this._addClickListener();
   }
@@ -33,7 +33,10 @@ export class HoverHandler {
 
     const obj = intersects[0].object;
 
-    if (!obj.userData.source || !obj.userData.source.includes("bundeslaender.geo.json")) {
+    if (
+      !obj.userData.source ||
+      !obj.userData.source.includes("bundeslaender.geo.json")
+    ) {
       if (this.hovered && this.hovered !== this.selected) {
         this._resetHover(this.hovered);
       }
@@ -63,12 +66,15 @@ export class HoverHandler {
       if (intersects.length > 0) {
         const obj = intersects[0].object;
 
-        if (obj.userData.source && obj.userData.source.includes("bundeslaender.geo.json")) {
+        if (
+          obj.userData.source &&
+          obj.userData.source.includes("bundeslaender.geo.json")
+        ) {
           if (this.selected && this.selected !== obj) {
             this._resetHover(this.selected);
           }
 
-          this._highlight(obj, 0x00008b, 1.010); 
+          this._highlight(obj, 0x00008b, 1.01);
           this.selected = obj;
           return;
         }

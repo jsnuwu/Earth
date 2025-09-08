@@ -3,7 +3,7 @@
   pointer-events: none;
   opacity: 1;
   visibility: visible;
-  transition: opacity 0.3s ease, visibility 0.2s ease;
+  transition: opacity 0.3s ease, visibility 0.8s ease;
 }
 
 .marker-container.hidden {
@@ -14,10 +14,10 @@
 .marker {
   width: 10px;
   height: 10px;
-  background-color: rgb(0, 206, 221);
+  background-color: rgb(255, 255, 255);
   border-radius: 50%;
   position: relative;
-  box-shadow: 0 0 10px rgba(76, 0, 255, 0.8);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.8);
   pointer-events: auto;
   animation: pulse 1.5s infinite ease-in-out;
   z-index: -1;
@@ -45,11 +45,22 @@
   transform: translateX(-50%);
   background: rgba(0, 0, 0, 0.925);
   color: #fff;
-  padding: 40px 80px;
+  padding: 20px 40px; 
   border-radius: 6px;
-  font-size: 12px;
-  white-space: nowrap;
+  font-size: 14px;
+  white-space: normal; 
   display: none;
-  pointer-events: none;
+  pointer-events: auto; 
   z-index: 1000;
+}
+
+.tooltip button {
+  margin-top: 10px;
+  padding: 6px 10px;
+  cursor: pointer;
+  border-radius: 6px;
+  border: none;
+  background: #007bff;
+  color: #fff;
+  font-size: 13px;
 }
